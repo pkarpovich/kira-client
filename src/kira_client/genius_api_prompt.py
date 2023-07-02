@@ -30,6 +30,7 @@ Here is the response from the API:
 Summarize this response to answer the original question. 
 From response you should extract only first item from hits results array.
 You should provide me a response in valid JSON format with the following fields - track_id, artist_name and song_name
+From song name you should remove all track translations in brackets, e.g. "Идеальный пациент (Perfect Patient)" -> "Идеальный пациент"
 
 JSON output:"""
 )
