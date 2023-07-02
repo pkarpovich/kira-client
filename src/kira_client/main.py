@@ -9,7 +9,7 @@ from langchain.chat_models import ChatOpenAI
 
 from src.kira_client.api import app
 from src.kira_client.genius_chain import GeniusChain
-from src.kira_client.services.spotify_client import SpotifyClient
+from src.kira_client.services import GeniusClient, SpotifyClient
 
 DefaultModel = "gpt-3.5-turbo-0613"
 
@@ -22,19 +22,22 @@ def main():
     if os.getenv("OPENAI_API_KEY") is None:
         raise ValueError("OPENAI_API_KEY is not set")
 
+    genius_client = GeniusClient()
     spotify_client = SpotifyClient()
 
     model = os.getenv("OPENAI_MODEL") or DefaultModel
 
-    llm = ChatOpenAI(temperature=0, model=model)
+    # llm = ChatOpenAI(temperature=0, model=model)
 
-    text = "Они видят мою боль, но боятся подойти, а мне хочется всего лишь оказаться среди них"
+    text = "10age - пушка"
+    resp = genius_client.search(text)
 
-    genius_chain = GeniusChain(llm)
-    resp = genius_chain.run(text)
-    print(resp)
+    # genius_chain = GeniusChain(llm)
+    # resp = genius_chain.run(text)
+    # print(resp)
+    #
 
-    track_id = spotify_client.get_song_by_name(resp.song_name, resp.artist_name)
+    track_id = spotify_client.get_song_by_name(resp.title, resp.artist_names)
     spotify_client.play_track(track_id)
 
 
