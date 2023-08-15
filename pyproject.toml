@@ -8,7 +8,7 @@ packages = [{include = "kira_client"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-langchain = "^0.0.216"
+langchain = "^0.0.236"
 python-dotenv = "^1.0.0"
 openai = "^0.27.8"
 lark = "^1.1.5"
