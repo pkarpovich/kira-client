@@ -9,6 +9,9 @@ class ConfigService:
     OPENAI_API_KEY: str
     OPENAI_MODEL: str = "gpt-4"
 
+    PORCUPINE_ACCESS_KEY: str
+    PORCUPINE_MODEL_PATH: str
+
     DEBUG: bool = False
 
     def __init__(self, env):
@@ -20,7 +23,7 @@ class ConfigService:
             if default_value is None and env.get(field) is None:
                 raise AppConfigError('The {} field is required'.format(field))
 
-            var_type = get_type_hints(AppConfig)[field]
+            var_type = get_type_hints(ConfigService)[field]
             try:
                 if var_type == bool:
                     value = self._parse_bool(env.get(field, default_value))

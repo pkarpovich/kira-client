@@ -20,6 +20,7 @@ fastapi = "^0.99.0"
 uvicorn = "^0.22.0"
 requests = "^2.31.0"
 pvporcupine = "^3.0.1"
+pyaudio = "^0.2.14"
 
 
 [build-system]
