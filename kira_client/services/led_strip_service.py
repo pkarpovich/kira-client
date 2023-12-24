@@ -23,7 +23,7 @@ class LedStripService:
         from apa102_pi.driver.apa102 import APA102
         from gpiozero import LED
 
-        self.strip = APA102(num_led=num_leds)
+        self.strip = APA102(num_led=num_leds, global_brightness=1)
         self.power_led = LED(led_pin)
         self.num_leds = num_leds
 

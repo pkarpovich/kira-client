@@ -12,6 +12,7 @@ class ConfigService:
     PORCUPINE_ACCESS_KEY: str
     PORCUPINE_MODEL_PATH: str
 
+    MICROPHONE_CHANNELS: int = 1
     LED_STRIP_ENABLED: bool = False
     DEBUG: bool = False
 

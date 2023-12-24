@@ -23,6 +23,8 @@ pvporcupine = "^3.0.1"
 pyaudio = "^0.2.14"
 apa102-pi = "^2.5.1"
 gpiozero = "^2.0"
+rpi-gpio = { version = "^0.7.1", markers = "sys_platform == 'linux' and platform_machine == 'aarch64'" }
+lgpio = "^0.0.0.2"
 
 
 [build-system]

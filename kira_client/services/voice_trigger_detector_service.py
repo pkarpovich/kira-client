@@ -27,7 +27,7 @@ class VoiceTriggerDetectorService:
         audio_stream = self.microphone_service.listen(
             frame_length=self.porcupine.frame_length,
             rate=self.porcupine.sample_rate,
-            channels=1,
+            channels=ConfigService.MICROPHONE_CHANNELS,
         )
 
         try:
