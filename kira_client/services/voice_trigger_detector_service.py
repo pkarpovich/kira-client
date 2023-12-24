@@ -24,37 +24,43 @@ class VoiceTriggerDetectorService:
         self.logger_service = logger_service
 
     def listen(self, trigger_cb: callable):
-        audio_stream = self.microphone_service.listen(
-            frame_length=self.porcupine.frame_length,
-            rate=self.porcupine.sample_rate,
-            channels=ConfigService.MICROPHONE_CHANNELS,
-        )
-
         try:
-            self.logger_service.info("Starting voice detection...")
             while True:
-                self.__process_frame(audio_stream, trigger_cb)
+                self.logger_service.info("Starting/Resuming voice detection...")
+
+                with self.__create_audio_stream() as audio_stream:
+                    while not self.__process_frame(audio_stream):
+                        continue
+
+                self.logger_service.info("Trigger word detected! Starting processing...")
+                self.__turn_on_led(Colors.Red)
+
+                trigger_cb()
 
         except KeyboardInterrupt:
             self.logger_service.info("Stopping voice detection...")
 
         finally:
-            audio_stream.close()
             self.porcupine.delete()
             self.logger_service.info("Voice detection stopped")
 
-    def __process_frame(self, audio_stream: Stream, trigger_cb: callable):
+    def __create_audio_stream(self):
+        return self.microphone_service.listen(
+            frame_length=self.porcupine.frame_length,
+            rate=self.porcupine.sample_rate,
+            channels=ConfigService.MICROPHONE_CHANNELS,
+        )
+
+    def __process_frame(self, audio_stream: Stream) -> bool:
         pcm = audio_stream.read(self.porcupine.frame_length)
         pcm = unpack_from("h" * self.porcupine.frame_length, pcm)
 
         result = self.porcupine.process(pcm)
-        if result == -1:
-            return
 
-        self.logger_service.info("Trigger word detected!")
-        self.led_strip_service.light_up(Colors.Red)
-        trigger_cb()
+        return result != -1
 
+    def __turn_on_led(self, color: Colors):
+        self.led_strip_service.light_up(color)
         Timer(5.0, self.led_strip_service.clear).start()
 
     def __del__(self):

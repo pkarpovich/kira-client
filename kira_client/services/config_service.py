@@ -13,6 +13,7 @@ class ConfigService:
     PORCUPINE_MODEL_PATH: str
 
     MICROPHONE_CHANNELS: int = 1
+    MICROPHONE_RECORDING_DURATION: int = 7
     LED_STRIP_ENABLED: bool = False
     DEBUG: bool = False
 
