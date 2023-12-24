@@ -21,6 +21,8 @@ uvicorn = "^0.22.0"
 requests = "^2.31.0"
 pvporcupine = "^3.0.1"
 pyaudio = "^0.2.14"
+apa102-pi = "^2.5.1"
+gpiozero = "^2.0"
 
 
 [build-system]

@@ -1,9 +1,10 @@
 from struct import unpack_from
+from threading import Timer
 
 from pvporcupine import create
 from pyaudio import Stream
 
-from kira_client.services import ConfigService, LoggerService, MicrophoneService
+from kira_client.services import Colors, ConfigService, LedStripService, LoggerService, MicrophoneService
 
 
 class VoiceTriggerDetectorService:
@@ -11,13 +12,15 @@ class VoiceTriggerDetectorService:
         self,
         config_service: ConfigService,
         logger_service: LoggerService,
-        microphone_service: MicrophoneService
+        microphone_service: MicrophoneService,
+        led_strip_service: LedStripService
     ):
         self.porcupine = create(
             keyword_paths=[config_service.PORCUPINE_MODEL_PATH],
             access_key=config_service.PORCUPINE_ACCESS_KEY,
         )
         self.microphone_service = microphone_service
+        self.led_strip_service = led_strip_service
         self.logger_service = logger_service
 
     def listen(self, trigger_cb: callable):
@@ -49,7 +52,10 @@ class VoiceTriggerDetectorService:
             return
 
         self.logger_service.info("Trigger word detected!")
+        self.led_strip_service.light_up(Colors.Red)
         trigger_cb()
+
+        Timer(5.0, self.led_strip_service.clear).start()
 
     def __del__(self):
         if self.porcupine is None:

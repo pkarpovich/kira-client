@@ -12,6 +12,7 @@ class ConfigService:
     PORCUPINE_ACCESS_KEY: str
     PORCUPINE_MODEL_PATH: str
 
+    LED_STRIP_ENABLED: bool = False
     DEBUG: bool = False
 
     def __init__(self, env):

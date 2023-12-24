@@ -4,7 +4,8 @@ import uvicorn
 from dotenv import load_dotenv
 
 from kira_client.api import app
-from kira_client.services import ConfigService, LoggerService, MicrophoneService, VoiceTriggerDetectorService
+from kira_client.services import ConfigService, LedStripService, LoggerService, MicrophoneService, \
+    VoiceTriggerDetectorService
 
 DefaultModel = "gpt-3.5-turbo-0613"
 
@@ -17,7 +18,13 @@ def main():
     config_service = ConfigService(os.environ)
     logger_service = LoggerService()
     microphone_service = MicrophoneService()
-    voice_trigger_detector_service = VoiceTriggerDetectorService(config_service, logger_service, microphone_service)
+    led_strip_service = LedStripService(config_service.LED_STRIP_ENABLED)
+    voice_trigger_detector_service = VoiceTriggerDetectorService(
+        config_service,
+        logger_service,
+        microphone_service,
+        led_strip_service
+    )
 
     logger_service.info("Application started")
 
