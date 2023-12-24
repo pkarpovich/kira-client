@@ -4,7 +4,7 @@ import uvicorn
 from dotenv import load_dotenv
 
 from kira_client.api import app
-from kira_client.services import ConfigService, MicrophoneService, VoiceTriggerDetectorService
+from kira_client.services import ConfigService, LoggerService, MicrophoneService, VoiceTriggerDetectorService
 
 DefaultModel = "gpt-3.5-turbo-0613"
 
@@ -15,16 +15,17 @@ def run_api():
 
 def main():
     config_service = ConfigService(os.environ)
+    logger_service = LoggerService()
     microphone_service = MicrophoneService()
-    voice_trigger_detector_service = VoiceTriggerDetectorService(config_service, microphone_service)
+    voice_trigger_detector_service = VoiceTriggerDetectorService(config_service, logger_service, microphone_service)
 
-    while True:
-        print("Waiting for trigger...")
-        voice_trigger_detector_service.listen(handle_trigger)
+    logger_service.info("Application started")
+
+    voice_trigger_detector_service.listen(handle_trigger)
 
 
 def handle_trigger():
-    print("Triggered!")
+    pass
 
 
 if __name__ == "__main__":
