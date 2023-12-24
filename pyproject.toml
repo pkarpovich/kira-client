@@ -8,17 +8,7 @@ packages = [{include = "kira_client"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
-langchain = "^0.0.216"
 python-dotenv = "^1.0.0"
-openai = "^0.27.8"
-lark = "^1.1.5"
-weaviate-client = "^3.21.0"
-tiktoken = "^0.4.0"
-kor = "^0.11.0"
-spotipy = "^2.23.0"
-fastapi = "^0.99.0"
-uvicorn = "^0.22.0"
-requests = "^2.31.0"
 pvporcupine = "^3.0.1"
 pyaudio = "^0.2.14"
 apa102-pi = "^2.5.1"
