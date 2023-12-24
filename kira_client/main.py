@@ -1,37 +1,24 @@
-import os
-
+from dependency_injector.wiring import inject, Provide
 from dotenv import load_dotenv
 
+from kira_client.container import Container
 from kira_client.controllers import TriggerController
-from kira_client.services import (ConfigService, LedStripService, LoggerService, MicrophoneService, OpenAIClient,
-                                  VoiceTriggerDetectorService)
 
 
-def main():
-    config_service = ConfigService(os.environ)
-    logger_service = LoggerService()
-    microphone_service = MicrophoneService()
-    led_strip_service = LedStripService(config_service.LED_STRIP_ENABLED)
-    voice_trigger_detector_service = VoiceTriggerDetectorService(
-        config_service,
-        logger_service,
-        microphone_service,
-        led_strip_service
-    )
-    openai_client = OpenAIClient(config_service)
-
-    trigger_controller = TriggerController(
-        voice_trigger_detector_service,
-        microphone_service,
-        logger_service,
-        config_service,
-        openai_client,
-    )
-
+@inject
+def main(
+    trigger_controller: TriggerController = Provide[Container.trigger_controller],
+    logger_service=Provide[Container.logger_service],
+):
     logger_service.info("Application started")
     trigger_controller.listen()
 
 
 if __name__ == "__main__":
     load_dotenv()
+
+    container = Container()
+    container.init_resources()
+    container.wire(modules=[__name__])
+
     main()

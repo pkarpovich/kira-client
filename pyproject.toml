@@ -16,6 +16,7 @@ gpiozero = "^2.0"
 rpi-gpio = { version = "^0.7.1", markers = "sys_platform == 'linux' and platform_machine == 'aarch64'" }
 lgpio = "^0.0.0.2"
 openai = "^1.6.1"
+dependency-injector = "^4.41.0"
 
 
 [build-system]
