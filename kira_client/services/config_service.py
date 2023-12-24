@@ -8,6 +8,7 @@ class AppConfigError(Exception):
 class ConfigService:
     OPENAI_API_KEY: str
     OPENAI_MODEL: str = "gpt-4"
+    OPENAI_SPEACH_RECOGNITION_MODEL: str = "whisper-1"
 
     PORCUPINE_ACCESS_KEY: str
     PORCUPINE_MODEL_PATH: str

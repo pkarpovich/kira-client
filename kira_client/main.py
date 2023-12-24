@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 
 from kira_client.controllers import TriggerController
-from kira_client.services import (ConfigService, LedStripService, LoggerService, MicrophoneService,
+from kira_client.services import (ConfigService, LedStripService, LoggerService, MicrophoneService, OpenAIClient,
                                   VoiceTriggerDetectorService)
 
 
@@ -18,12 +18,14 @@ def main():
         microphone_service,
         led_strip_service
     )
+    openai_client = OpenAIClient(config_service)
 
     trigger_controller = TriggerController(
         voice_trigger_detector_service,
         microphone_service,
         logger_service,
         config_service,
+        openai_client,
     )
 
     logger_service.info("Application started")
