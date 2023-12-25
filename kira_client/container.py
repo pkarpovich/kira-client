@@ -43,6 +43,7 @@ class Container(DeclarativeContainer):
         TriggerController,
         voice_trigger_detector_service=voice_trigger_detector_service,
         microphone_service=microphone_service,
+        led_strip_service=led_strip_service,
         logger_service=logger_service,
         config_service=config_service,
         openai_client=openai_client,

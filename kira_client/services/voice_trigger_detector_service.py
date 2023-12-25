@@ -1,5 +1,4 @@
 from struct import unpack_from
-from threading import Timer
 
 from pvporcupine import create
 from pyaudio import Stream
@@ -22,6 +21,7 @@ class VoiceTriggerDetectorService:
         self.microphone_service = microphone_service
         self.led_strip_service = led_strip_service
         self.logger_service = logger_service
+        self.config_service = config_service
 
     def listen(self, trigger_cb: callable):
         try:
@@ -33,7 +33,7 @@ class VoiceTriggerDetectorService:
                         continue
 
                 self.logger_service.info("Trigger word detected! Starting processing...")
-                self.__turn_on_led(Colors.Red)
+                self.led_strip_service.light_up(Colors.Red)
 
                 trigger_cb()
 
@@ -58,10 +58,6 @@ class VoiceTriggerDetectorService:
         result = self.porcupine.process(pcm)
 
         return result != -1
-
-    def __turn_on_led(self, color: Colors):
-        self.led_strip_service.light_up(color)
-        Timer(5.0, self.led_strip_service.clear).start()
 
     def __del__(self):
         if self.porcupine is None:

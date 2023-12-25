@@ -1,8 +1,9 @@
 import tempfile
+from threading import Timer
 from typing import IO
 
 from kira_client.prompts import IntentRecognitionPrompt
-from kira_client.services import ConfigService, LoggerService, MicrophoneService, OpenAIClient, \
+from kira_client.services import Colors, ConfigService, LedStripService, LoggerService, MicrophoneService, OpenAIClient, \
     VoiceTriggerDetectorService
 from kira_client.stores import IntentStore
 
@@ -12,6 +13,7 @@ class TriggerController:
         self,
         voice_trigger_detector_service: VoiceTriggerDetectorService,
         microphone_service: MicrophoneService,
+        led_strip_service: LedStripService,
         logger_service: LoggerService,
         config_service: ConfigService,
         openai_client: OpenAIClient,
@@ -19,6 +21,7 @@ class TriggerController:
     ):
         self.voice_trigger_detector_service = voice_trigger_detector_service
         self.microphone_service = microphone_service
+        self.led_strip_service = led_strip_service
         self.logger_service = logger_service
         self.config_service = config_service
         self.openai_client = openai_client
@@ -38,10 +41,16 @@ class TriggerController:
                 duration=duration,
             )
             self.logger_service.info(f"Audio saved to {temp_file.name}")
+            self.led_strip_service.light_up(Colors.Yellow)
 
             transcription = self.__transcribe_audio(temp_file.file)
+            self.led_strip_service.light_up(Colors.Orange)
+
             intent = self.__recognize_intent(transcription)
+            self.led_strip_service.light_up(Colors.Green)
             self.logger_service.info(f"Intent: {intent}")
+
+            Timer(3.0, self.led_strip_service.clear).start()
 
     def __transcribe_audio(self, temp_file: IO[bytes]) -> str:
         self.logger_service.info("Transcribing audio...")
