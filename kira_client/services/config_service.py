@@ -7,11 +7,13 @@ class AppConfigError(Exception):
 
 class ConfigService:
     OPENAI_API_KEY: str
-    OPENAI_MODEL: str = "gpt-4"
+    OPENAI_CHAT_MODEL: str = "gpt-4-1106-preview"
     OPENAI_SPEACH_RECOGNITION_MODEL: str = "whisper-1"
 
     PORCUPINE_ACCESS_KEY: str
     PORCUPINE_MODEL_PATH: str
+
+    INTENT_STORE_PATH: str
 
     MICROPHONE_CHANNELS: int = 1
     MICROPHONE_RECORDING_DURATION: int = 7

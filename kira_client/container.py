@@ -6,6 +6,7 @@ from dependency_injector.containers import DeclarativeContainer
 from kira_client.controllers import TriggerController
 from kira_client.services import ConfigService, LedStripService, LoggerService, MicrophoneService, \
     OpenAIClient, VoiceTriggerDetectorService
+from kira_client.stores import IntentStore
 
 
 class Container(DeclarativeContainer):
@@ -15,6 +16,16 @@ class Container(DeclarativeContainer):
     is_led_strip_enabled = providers.Callable(
         lambda config_service: config_service.LED_STRIP_ENABLED,
         config_service=config_service
+    )
+
+    intent_store_path = providers.Callable(
+        lambda config_service: config_service.INTENT_STORE_PATH,
+        config_service=config_service
+    )
+
+    intent_store = providers.Singleton(
+        IntentStore,
+        file_path=intent_store_path
     )
 
     microphone_service = providers.Singleton(MicrophoneService)
@@ -35,4 +46,5 @@ class Container(DeclarativeContainer):
         logger_service=logger_service,
         config_service=config_service,
         openai_client=openai_client,
+        intent_store=intent_store
     )

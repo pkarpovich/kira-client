@@ -1,5 +1,6 @@
 from typing import IO
 
+from jinja2 import Template
 from openai import OpenAI
 
 from kira_client.services import ConfigService
@@ -17,3 +18,25 @@ class OpenAIClient:
         )
 
         return resp.text
+
+    def text_completion(self, prompt: str, user_request: str) -> str:
+        resp = self.client.chat.completions.create(
+            model=self.config_service.OPENAI_CHAT_MODEL,
+            response_format={"type": "json_object"},
+            messages=[
+                {
+                    "role": "system",
+                    "content": prompt,
+                },
+                {
+                    "role": "user",
+                    "content": user_request,
+                }
+            ]
+        )
+
+        return resp.choices[0].message.content
+
+    @staticmethod
+    def populate_template_with_variables(template: str, variables: dict) -> str:
+        return Template(template).render(variables)
