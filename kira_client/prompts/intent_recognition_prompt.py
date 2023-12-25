@@ -9,6 +9,7 @@ This is a list of all possible intents:
 
 The output should be a JSON file with the following structure:
 { "intent": "NewMeeting" }
+Intent should be in raw format (without []).
 
 User input will be in the next user message
 """

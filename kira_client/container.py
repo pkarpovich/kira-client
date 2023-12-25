@@ -4,7 +4,8 @@ from dependency_injector import providers
 from dependency_injector.containers import DeclarativeContainer
 
 from kira_client.controllers import TriggerController
-from kira_client.services import ConfigService, LedStripService, LoggerService, MicrophoneService, \
+from kira_client.services import ConfigService, HttpClient, IntentService, LedStripService, LoggerService, \
+    MicrophoneService, \
     OpenAIClient, VoiceTriggerDetectorService
 from kira_client.stores import IntentStore
 
@@ -38,6 +39,8 @@ class Container(DeclarativeContainer):
         logger_service=logger_service,
     )
     openai_client = providers.Factory(OpenAIClient, config_service=config_service)
+    http_client = providers.Singleton(providers.Factory(HttpClient))
+    intent_service = providers.Singleton(IntentService, http_client=http_client, intent_store=intent_store)
 
     trigger_controller = providers.Singleton(
         TriggerController,
@@ -47,5 +50,5 @@ class Container(DeclarativeContainer):
         logger_service=logger_service,
         config_service=config_service,
         openai_client=openai_client,
-        intent_store=intent_store
+        intent_service=intent_service,
     )

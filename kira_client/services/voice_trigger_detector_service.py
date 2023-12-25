@@ -33,7 +33,7 @@ class VoiceTriggerDetectorService:
                         continue
 
                 self.logger_service.info("Trigger word detected! Starting processing...")
-                self.led_strip_service.light_up(Colors.Red)
+                self.led_strip_service.light_up(Colors.Lavender)
 
                 trigger_cb()
 

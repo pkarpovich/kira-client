@@ -10,6 +10,16 @@ class Colors(Enum):
     Red = (255, 0, 0)
     White = (255, 255, 255)
     Yellow = (255, 255, 51)
+    Navy = (0, 0, 128)
+    SkyBlue = (135, 206, 235)
+    Lime = (0, 255, 0)
+    Olive = (128, 128, 0)
+    Gold = (255, 215, 0)
+    Coral = (255, 127, 80)
+    Lavender = (230, 230, 250)
+    Fuchsia = (255, 0, 255)
+    Sienna = (160, 82, 45)
+    Silver = (192, 192, 192)
     Off = (0, 0, 0)
 
 

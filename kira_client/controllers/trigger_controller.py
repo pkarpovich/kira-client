@@ -1,11 +1,12 @@
+import json
 import tempfile
 from threading import Timer
 from typing import IO
 
 from kira_client.prompts import IntentRecognitionPrompt
-from kira_client.services import Colors, ConfigService, LedStripService, LoggerService, MicrophoneService, OpenAIClient, \
+from kira_client.services import Colors, ConfigService, IntentService, LedStripService, LoggerService, \
+    MicrophoneService, OpenAIClient, \
     VoiceTriggerDetectorService
-from kira_client.stores import IntentStore
 
 
 class TriggerController:
@@ -16,16 +17,16 @@ class TriggerController:
         led_strip_service: LedStripService,
         logger_service: LoggerService,
         config_service: ConfigService,
+        intent_service: IntentService,
         openai_client: OpenAIClient,
-        intent_store: IntentStore,
     ):
         self.voice_trigger_detector_service = voice_trigger_detector_service
         self.microphone_service = microphone_service
         self.led_strip_service = led_strip_service
         self.logger_service = logger_service
         self.config_service = config_service
+        self.intent_service = intent_service
         self.openai_client = openai_client
-        self.intent_store = intent_store
 
     def listen(self):
         self.voice_trigger_detector_service.listen(self.__handle_trigger)
@@ -47,8 +48,13 @@ class TriggerController:
             self.led_strip_service.light_up(Colors.Orange)
 
             intent = self.__recognize_intent(transcription)
-            self.led_strip_service.light_up(Colors.Green)
+            self.led_strip_service.light_up(Colors.Purple)
             self.logger_service.info(f"Intent: {intent}")
+
+            is_processed = self.intent_service.process_intent_action(intent)
+            result_color = Colors.Green if is_processed else Colors.Red
+            self.logger_service.info(f"Intent processed: {is_processed}")
+            self.led_strip_service.light_up(result_color)
 
             Timer(3.0, self.led_strip_service.clear).start()
 
@@ -62,11 +68,12 @@ class TriggerController:
     def __recognize_intent(self, transcription: str) -> str:
         self.logger_service.info("Recognizing intent...")
 
-        intents = self.intent_store.get_all()
+        intents = self.intent_service.get_all_intents()
         prompt = self.openai_client.populate_template_with_variables(
             IntentRecognitionPrompt,
             {
                 "intents": intents,
             }
         )
-        return self.openai_client.text_completion(prompt, transcription)
+        intent_resp = self.openai_client.text_completion(prompt, transcription)
+        return json.loads(intent_resp)["intent"]
