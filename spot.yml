@@ -1,0 +1,21 @@
+task:
+  - name: git checkout
+    script: git clone git@github.com:pkarpovich/kira-client.git ~/kira-client
+    cond: "[ ! -d ~/kira-client/.git ]"
+
+  - name: git pull
+    script: |
+      cd ~/kira-client
+      git pull
+
+  - name: install dependencies
+    script: |
+      cd ~/kira-client
+      ls -l /home/pi/.local/bin/poetry
+      poetry install
+
+  - name: restart kira-client
+    script: |
+      cd ~/kira-client
+      pm2 reload kira-client
+      pm2 save

@@ -1,0 +1,3 @@
+groups:
+  local:
+    - {host: "192.168.198.133", port: 22, user: "pi"}
