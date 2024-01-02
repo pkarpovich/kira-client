@@ -31,6 +31,9 @@ class TriggerController:
     def listen(self):
         self.voice_trigger_detector_service.listen(self.__handle_trigger)
 
+    def pause_voice_trigger_detector(self):
+        self.voice_trigger_detector_service.pause_voice_detection()
+
     def __handle_trigger(self):
         duration = self.config_service.MICROPHONE_RECORDING_DURATION
         self.logger_service.info(f"Recording audio for {duration} seconds...")

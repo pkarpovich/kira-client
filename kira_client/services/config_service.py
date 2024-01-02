@@ -6,6 +6,8 @@ class AppConfigError(Exception):
 
 
 class ConfigService:
+    HTTP_PORT: int = 8000
+
     OPENAI_API_KEY: str
     OPENAI_CHAT_MODEL: str = "gpt-4-1106-preview"
     OPENAI_SPEACH_RECOGNITION_MODEL: str = "whisper-1"

@@ -23,6 +23,14 @@ class VoiceTriggerDetectorService:
         self.logger_service = logger_service
         self.config_service = config_service
 
+        self.is_voice_detection_paused = False
+
+    def pause_voice_detection(self):
+        self.is_voice_detection_paused = True
+
+    def resume_voice_detection(self):
+        self.is_voice_detection_paused = False
+
     def listen(self, trigger_cb: callable):
         try:
             while True:
@@ -32,6 +40,7 @@ class VoiceTriggerDetectorService:
                     while not self.__process_frame(audio_stream):
                         continue
 
+                self.resume_voice_detection()
                 self.logger_service.info("Trigger word detected! Starting processing...")
                 self.led_strip_service.light_up(Colors.Lavender)
 
@@ -52,6 +61,9 @@ class VoiceTriggerDetectorService:
         )
 
     def __process_frame(self, audio_stream: Stream) -> bool:
+        if self.is_voice_detection_paused:
+            return True
+
         pcm = audio_stream.read(self.porcupine.frame_length)
         pcm = unpack_from("h" * self.porcupine.frame_length, pcm)
 
