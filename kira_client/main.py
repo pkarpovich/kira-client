@@ -8,7 +8,7 @@ from uvicorn import Config, Server
 
 from kira_client.container import Container
 from kira_client.controllers import TriggerController
-from kira_client.routers import intent_router
+from kira_client.routers import health_router, intent_router
 from kira_client.services import ConfigService
 
 
@@ -41,8 +41,9 @@ if __name__ == "__main__":
     app = FastAPI()
     app.container = container
     app.include_router(intent_router)
+    app.include_router(health_router)
 
-    container.wire(modules=[__name__], packages=["kira_client.routers.intents"])
+    container.wire(modules=[__name__], packages=["kira_client.routers"])
 
     main_thread = Thread(target=main, args=())
     main_thread.start()
