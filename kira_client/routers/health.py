@@ -1,13 +1,16 @@
-from dependency_injector.wiring import inject
-from fastapi import APIRouter
+from dependency_injector.wiring import inject, Provide
+from fastapi import APIRouter, Depends, status
 from pydantic import BaseModel
-from starlette import status
+
+from kira_client.container import Container
+from kira_client.services import HardwareInfoService
 
 health_router = APIRouter(prefix="/health")
 
 
 class HealthStatusResponse(BaseModel):
     status: str
+    cpu_temp: float
 
 
 @health_router.get(
@@ -16,5 +19,9 @@ class HealthStatusResponse(BaseModel):
     response_model=HealthStatusResponse
 )
 @inject
-def health_status() -> HealthStatusResponse:
-    return HealthStatusResponse(status="ok")
+def health_status(
+    hardware_info_service: HardwareInfoService = Depends(Provide[Container.hardware_info_service]),
+) -> HealthStatusResponse:
+    cpu_temp = hardware_info_service.get_cpu_temperature()
+
+    return HealthStatusResponse(status="ok", cpu_temp=cpu_temp)

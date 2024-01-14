@@ -1,4 +1,5 @@
 from .config_service import ConfigService
+from .hardware_info_service import HardwareInfoService
 from .http_client import HttpClient
 from .intent_service import IntentService
 from .led_strip_service import Colors, LedStripService

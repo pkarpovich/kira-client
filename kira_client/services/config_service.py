@@ -19,7 +19,7 @@ class ConfigService:
 
     MICROPHONE_CHANNELS: int = 1
     MICROPHONE_RECORDING_DURATION: int = 7
-    LED_STRIP_ENABLED: bool = False
+    HARDWARE_PIN_ENABLED: bool = False
     DEBUG: bool = False
 
     def __init__(self, env):
